@@ -15,7 +15,7 @@ $.ajaxQueue = function( ajaxOpts ) {
 			return true
 		}
 	    $('#status-text').html(ajaxOpts['url']);
-		$('#status-text').pulse( { color  : '#95cde5'}, { pulses : 1, duration: 150});
+		$('#status-text').pulse( { color  : '#95cde5'}, { pulses : 1, duration: 200});
         jqXHR = $.ajax( ajaxOpts );
         jqXHR.done( dfd.resolve )
             .fail( dfd.reject )

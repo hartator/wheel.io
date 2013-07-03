@@ -178,6 +178,12 @@
 			}
 			mcp.updateGraph();
 		}
+		
+		var mainDown = function() {
+			$("#stop").click();
+			$('#status-text').html('The website url appears to be down. Try again later.');
+			$('#status-text').css({color: "red"})
+		}
 
 		var parseUrl = function(url) {
 				var origin_link_object = $('<a href="' + url + '">#</a>');
@@ -187,20 +193,18 @@
 				$.ajaxQueue({
 					url: url,
 			  		type: "GET",
-					timeout:2200,
+					timeout:3200,
 			  		dataType: "html"}).done(function(data) {
 					if(typeof(data['results']) === 'undefined') {
 						if ( url == start_url ) {
-							$("#stop").click();
-							alert('The main website seems down.');
+							mainDown();
 						}
 						return true;
 					}
 					var raw_html = data['results'][0];
 					if(typeof(raw_html) === 'undefined') {
 						if ( url == start_url ) {
-							$("#stop").click();
-							alert('The main website seems down.');
+							mainDown();
 						}
 						return true;
 					}
@@ -256,12 +260,11 @@
 					})
 					updateWheel();
 			    }).fail(function(data) { 
-					if ( origin_hostname != start_host) { 
+					if ( origin_hostname != start_host ) { 
 						window.nodes[origin_hostname] = { color: "#b01700" };
 					} else {
 						if ( url == start_url ) {
-							$("#stop").click();
-							alert('The main website seems down.');
+							mainDown();
 						}
 					} 
 					updateWheel(); });
@@ -302,10 +305,47 @@
 		$('#start').hide();
 		$('#stop').show();
 		startWhell(main_website);
+	} else {
+		var demo = "Funlabo {color:#444, label:Main Website}            \n   \
+		Funlabo -> Funlabo {weight:2}                                   \n   \
+		Funlabo -> Defouland {weight:2}                                 \n   \
+		Defouland {color:#b01700,label:Website Down}                    \n   \
+		Funlabo -> Zoolabo {weight:2}                                   \n   \
+		Zoolabo {color:#95cde5, label: Linked Website }                 \n   \
+		Funlabo -> Avantavia {weight:2}                                 \n   \
+		Avantavia {color:#95cde5,label:Linked Website}                  \n   \
+		Funlabo -> Stratozor {weight:2}                                 \n   \
+		Stratozor {color:#95cde5,label: Linked Website }                \n   \
+		Funlabo -> Funlabo.es {weight:2}                                \n   \
+		Funlabo.es {color:#95cde5,label: Linked Website }               \n   \
+		Zoolabo -> Zoolabo {weight:2}                                   \n   \
+		Zoolabo -> Defouland {weight:1}                                 \n   \
+		Zoolabo -> Avantavia {weight:1}                                 \n   \
+		Zoolabo -> Funlabo {weight:1}                                   \n   \
+		Zoolabo -> Stratozor {weight:1}                                 \n   \
+		Avantavia -> Avantavia {weight:2}                               \n   \
+		Avantavia -> Defouland {weight:1}                               \n   \
+		Avantavia -> Zoolabo {weight:1}                                 \n   \
+		Avantavia -> Stratozor {weight:1}                               \n   \
+		Avantavia -> Funlabo {weight:1}                                 \n   \
+		Stratozor -> Stratozor {weight:2}                               \n   \
+		Stratozor -> Defouland {weight:1}                               \n   \
+		Stratozor -> Zoolabo {weight:1}                                 \n   \
+		Stratozor -> Avantavia {weight:1}                               \n   \
+		Stratozor -> Funlabo {weight:1}                                 \n   \
+		Stratozor -> Stratozor.es {weight:1}                            \n   \
+		Stratozor.es {color:#db8e3c,label: Pending Website }            \n   \
+		Funlabo.es -> Funlabo.es {weight:2}                             \n   \
+		Funlabo.es -> Stratozor.es {weight:1}"
+		window.src = demo;
 	}
 	
 	window.mcp = HalfViz("#halfviz");
 	window.mcp.resize();
+	
+	if (typeof(window.src) !== 'undefined') {
+		window.mcp.updateGraph();
+	}
 	
   })
 
