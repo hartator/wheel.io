@@ -296,7 +296,10 @@
 	})(window.location.search.substr(1).split('&'));
 	
 	if(typeof(qs['website']) !== 'undefined') {
-		var main_website = qs['website'].substring(0, qs['website'].length - 1).trim();
+		var main_website = qs['website'].trim();
+		if(main_website.slice(-1) == '/') {
+			main_website = qs['website'].substring(0, qs['website'].length - 1);
+		}
 		$('#website').val(main_website);
 		$('#loader').removeClass('paused');
 		$('#start').hide();
